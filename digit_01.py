@@ -22,15 +22,15 @@ DIGITSDICT = {
 }
 
 roi_color = cv2.imread(args["path"])
-roi_color = cv2.resize(roi_color, None, None, fx=1.25, fy=1.25)
+# roi_color = cv2.resize(roi_color, None, None, fx=1.25, fy=1.25)
 roi = cv2.cvtColor(roi_color, cv2.COLOR_BGR2GRAY)
 
 RATIO = roi.shape[0] * 0.2
 
 roi = cv2.bilateralFilter(roi, 5, 30, 60)
 
-# trimmed = roi[int(RATIO) :, int(RATIO) : roi.shape[1] - int(RATIO)]
-# roi_color = roi_color[int(RATIO) :, int(RATIO) : roi.shape[1] - int(RATIO)]
+trimmed = roi[int(RATIO) :, int(RATIO) : roi.shape[1] - int(RATIO)]
+roi_color = roi_color[int(RATIO) :, int(RATIO) : roi.shape[1] - int(RATIO)]
 roi_color = roi
 cv2.imshow("Blurred and Trimmed", roi)
 cv2.waitKey(0)
@@ -40,22 +40,17 @@ edged = cv2.adaptiveThreshold( trimmed, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2
 cv2.imshow("Edged", edged)
 cv2.waitKey(0)
 
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 5))
 dilated = cv2.dilate(edged, kernel, iterations=1)
 cv2.imshow("Dilated", dilated)
 cv2.waitKey(0)
 
-kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
-eroded = cv2.erode(dilated, kernel, iterations=1)
-cv2.imshow("Eroded", eroded)
-cv2.waitKey(0)
-
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 6))
-dilated = cv2.dilate(eroded, kernel, iterations=1)
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 1))
+dilated = cv2.dilate(dilated, kernel, iterations=1)
 cv2.imshow("Dilated", dilated)
 cv2.waitKey(0)
 
-kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 1))
 eroded = cv2.erode(dilated, kernel, iterations=1)
 cv2.imshow("Eroded", eroded)
 cv2.waitKey(0)

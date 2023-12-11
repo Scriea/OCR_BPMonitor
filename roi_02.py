@@ -11,7 +11,7 @@ img = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
 
 img = cv2.GaussianBlur(img, (3, 3), 0)
 blurred = cv2.bilateralFilter(img, 5, sigmaColor=50, sigmaSpace=50)
-edged = cv2.Canny(blurred, 100, 150, 255)
+edged = cv2.Canny(blurred, 30, 150, 255)
 
 cv2.imshow("Outline of device", edged)
 cv2.waitKey(0)
